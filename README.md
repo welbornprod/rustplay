@@ -38,3 +38,10 @@ Simple strings:
 ```
 ./rustplay.js 'fn main() { println!("Hello World!"); }'
 ```
+
+Requirements:
+-------------
+
+* Node.js (0.10.25+)
+* docopt - (`npm install docopt`)
+* xmlhttprequest - (`npm install xmlhttprequest`)
