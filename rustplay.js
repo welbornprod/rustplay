@@ -215,6 +215,13 @@ function main() {
             handle_code(stdin_data);
         });
     }
+    return 0;
 }
+
+process.on('SIGINT', function () {
+    /* Print a friendly message when interrupted. */
+    console.log('\nUser cancelled.\n');
+    process.exit(2);
+});
 
 main();
