@@ -9,9 +9,9 @@
 var docopt = require('docopt');
 var fs = require('fs');
 
-var name = 'rustplay';
-var version = '0.0.1-1';
-var version_str = [name, version].join(' v. ');
+var appname = 'rustplay';
+var version = '0.0.2';
+var version_str = [appname, version].join(' v. ');
 
 var usage_str = [
     version_str,
@@ -33,7 +33,7 @@ var usage_str = [
     '    -m,--main               : Wrap code in fn main() {..}.',
     '    -o lvl,--optimize lvl   : Optimization level (0-3).',
     '                              Default: 0',
-    '    -v,--version            : Print version and exit.'
+    '    -v,--version            : Print version and exit.',
 ].join('\n');
 
 // Parse user args, exit on incorrect args.
@@ -41,24 +41,25 @@ var args = docopt.docopt(usage_str, {'version': version_str});
 
 // Global debug flag.
 var DEBUG = args['--debug'];
+var debug, debugobj;
 if (DEBUG) {
-    var debug = function (s) {
+    debug = function (s) {
         /* Print a message with the debug label. */
         console.log('debug: ' + s);
     };
-    var debugobj = function (lbl, obj) {
+    debugobj = function (lbl, obj) {
         /* Print an object with a label. */
         process.stdout.write('debug: ' + lbl);
         console.dir(obj);
     };
 } else {
     // Dummies for when debug is off.
-    var debug = function () { return null; };
-    var debugobj = function () { return null; };
+    debug = function () { return null; };
+    debugobj = function () { return null; };
 }
 
 // Emulates the browser's AJAX functionality.
-var XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest;
+var XMLHttpRequest = require('xmlhttprequest').XMLHttpRequest; // eslint-disable-line
 
 // Polyfill for ecma 6 endsWith.
 String.prototype.endsWith = function (s) {
@@ -96,7 +97,7 @@ function eval_code(options) {
     var data = JSON.stringify({
         version: channel,
         optimize: optimize,
-        code: code
+        code: code,
     });
 
     debug('Connecting to playpen...');
@@ -173,7 +174,7 @@ function handle_code(data) {
         success: p,
         failure: p,
         channel: args['--channel'],
-        optimize: args['--optimize']
+        optimize: args['--optimize'],
     });
 }
 
@@ -195,7 +196,7 @@ function main() {
             missing: function (code) {
                 debug('Using user string data...');
                 handle_code(code);
-            }
+            },
         });
     } else {
         debug('Using stdin data...');
